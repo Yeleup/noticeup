@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+    <name>Architect by iSenseLabs</name>
+    <version>3.0.0</version>
+    <author>iSenseLabs</author>
+    <code>isenselabs_architect</code>
+    <link>https://github.com/iSenseLabs/architect</link>
+
+    <file path="admin/controller/common/column_left.php">
+        <operation error="log">
+            <search><![CDATA[$design = array();]]></search>
+            <add position="before"><![CDATA[
+                if ($this->registry->get('user')->store_id == 0) {
+                    $data['menus'] = $this->load->controller('extension/module/architect/hookNav', $data['menus']);
+                }
+            ]]></add>
+        </operation>
+    </file>
+    <file path="admin/model/setting/module.php">
+        <operation error="log">
+            <search><![CDATA[$this->db->query("INSERT INTO `" . DB_PREFIX . "module`]]></search>
+            <add position="after"><![CDATA[
+                return $this->db->getLastId();
+            ]]></add>
+        </operation>
+        <operation error="log">
+            <search><![CDATA[deleteModule($module_id)]]></search>
+            <add position="after"><![CDATA[
+                $this->load->controller('extension/module/architect/hookDelete', array('module_id' => $module_id));
+            ]]></add>
+        </operation>
+    </file>
+</modification>

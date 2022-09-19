@@ -1,0 +1,52 @@
+<h3>{{ heading_title }}</h3>
+<div class="row">
+  <div id="special_carousel{{ module }}" class="owl-carousel" >
+    {% for product in products %}
+    <div class="product-layout">
+      <div class="product-thumb transition">
+        <div class="image"><a href="{{ product.href }}"><img src="{{ product.thumb }}" alt="{{ product.name }}" title="{{ product.name }}" class="img-responsive" /></a></div>
+        <div class="caption">
+          <h4><a href="{{ product.href }}">{{ product.name }}</a></h4>
+          <p class="product_descr">{{ product.description }}</p>
+          {% if product.rating %}
+          <div class="rating">{% for i in 1..5 %}
+            {% if product.rating < i %} <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-2x"></i></span> {% else %} <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span> {% endif %}
+            {% endfor %}</div>
+          {% endif %}
+          {% if product.price %}
+          <p class="price"> {% if not product.special %}
+            {{ product.price }}
+            {% else %} <span class="price-new">{{ product.special }}</span> <span class="price-old">{{ product.price }}</span> {% endif %}
+            {% if product.tax %} <span class="price-tax">{{ text_tax }} {{ product.tax }}</span> {% endif %} </p>
+          {% endif %} </div>
+        <div class="cart_group">
+          <button type="button" class="btn_cart" onclick="cart.add('{{ product.product_id }}');"><i class="fa fa-shopping-cart"></i> <span class="">{{ button_cart }}</span></button>
+          <div class="cart_group_btn">
+            <button type="button" class="btn_wishlist" data-toggle="tooltip" title="{{ button_wishlist }}" onclick="wishlist.add('{{ product.product_id }}');"><i class="fa fa-heart"></i></button>
+            <button type="button" class="btn_compare" data-toggle="tooltip" title="{{ button_compare }}" onclick="compare.add('{{ product.product_id }}');"><i class="fa fa-exchange"></i></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+  </div> 
+</div>
+<script type="text/javascript"><!--
+$('#special_carousel{{ module }}').owlCarousel({
+  items: {{ items }},
+	autoPlay: {{ autoplay }},
+  slideSpeed: {{ slidespeed }},
+  paginationSpeed: {{ paginationspeed }},
+  rewindSpeed: {{ rewindspeed }},
+  {% if (stoponhover) %}
+  stopOnHover: true,
+  {% endif %}
+  {% if (navigation) %}
+	navigation: true,
+  {% endif %}
+	navigationText: ['<i style="font-size: 24px; height: 30px; width: 30px; border-radius: 30px; background: #fff; text-align: center; line-height: 30px;     box-shadow: 0 0 6px rgba(0,0,0,0.4)" class="fa fa-angle-left" aria-hidden="true"></i>', '<i style="font-size: 24px; height: 30px; width: 30px; border-radius: 30px; background: #fff; text-align: center; line-height: 30px; box-shadow: 0 0 6px rgba(0,0,0,0.4)" class="fa fa-angle-right" aria-hidden="true"></i>'],
+  {% if (not pagination) %}
+	pagination: false
+  {% endif %}
+});
+--></script>

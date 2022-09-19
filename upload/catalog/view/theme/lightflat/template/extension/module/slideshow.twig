@@ -1,0 +1,20 @@
+<div id="slideshow{{ module }}" class="owl-carousel" style="opacity: 1;">
+  {% for banner in banners %}
+  <div class="item">
+    {% if banner.link %}
+    <a href="{{ banner.link }}"><img src="{{ banner.image }}" alt="{{ banner.title }}" class="img-responsive" /></a>
+    {% else %}
+    <img src="{{ banner.image }}" alt="{{ banner.title }}" class="img-responsive" />
+    {% endif %}
+  </div>
+  {% endfor %} </div>
+<script type="text/javascript"><!--
+$('#slideshow{{ module }}').owlCarousel({
+	items: 6,
+	autoPlay: 3000,
+	singleItem: true,
+	navigation: true,
+	navigationText: ['<i style="font-size: 24px; height: 30px; width: 30px; border-radius: 30px; background: #fff; text-align: center; line-height: 30px;     box-shadow: 0 0 6px rgba(0,0,0,0.4)" class="fa fa-angle-left" aria-hidden="true"></i>', '<i style="font-size: 24px; height: 30px; width: 30px; border-radius: 30px; background: #fff; text-align: center; line-height: 30px; box-shadow: 0 0 6px rgba(0,0,0,0.4)" class="fa fa-angle-right" aria-hidden="true"></i>'],
+	pagination: true
+});
+--></script>

@@ -1,0 +1,100 @@
+{{ header }}
+<div class="container">
+  <header>
+    <div class="row">
+      <div class="col-sm-6">
+        <h1 class="pull-left">3<small>/4</small></h1>
+        <h3>{{ heading_title }}<br>
+          <small>{{ text_step_3 }}</small></h3>
+      </div>
+      <div class="col-sm-6">
+        <div id="logo" class="pull-right hidden-xs"> <img src="view/image/logo.png" alt="OpenCart" title="OpenCart" /></div>
+      </div>
+    </div>
+  </header>
+  {% if error_warning %}
+  <div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+  </div>
+  {% endif %}
+  <div class="row">
+    <div class="col-sm-9">
+      <form action="{{ action }}" method="post" enctype="multipart/form-data" class="form-horizontal">
+        <p>{{ text_information_user }}</p>
+        <fieldset>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-firstname">{{ entry_firstname }}</label>
+            <div class="col-sm-10">
+              <input type="text" name="firstname" value="{{ firstname }}" id="input-firstname" class="form-control" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-lastname">{{ entry_lastname }}</label>
+            <div class="col-sm-10">
+              <input type="text" name="lastname" value="{{ lastname }}" id="input-lastname" class="form-control" />
+            </div>
+          </div>
+          <div class="form-group required">
+            <label class="col-sm-2 control-label" for="input-password">{{ entry_password }}</label>
+            <div class="col-sm-10">
+              <input type="password" name="password" value="{{ password }}" id="input-password" class="form-control" />
+                {% if error_password %}
+                  <div class="text-danger">{{ error_password }}</div>
+                {% endif %}
+            </div>
+          </div>
+          <div class="form-group required">
+            <label class="col-sm-2 control-label" for="input-confirm">{{ entry_confirm }}</label>
+            <div class="col-sm-10">
+              <input type="password" name="confirm" value="{{ confirm }}" id="input-confirm" class="form-control" />
+                {% if error_confirm %}
+                  <div class="text-danger">{{ error_confirm }}</div>
+                {% endif %}
+            </div>
+          </div>
+        </fieldset>
+        <p>{{ text_information_site }}</p>
+        <fieldset>
+          <div class="form-group required">
+            <label class="col-sm-2 control-label" for="input-domain">{{ entry_domain }}</label>
+            <div class="col-sm-6">
+              <input type="text" name="domain" value="{{ domain }}" id="input-domain" class="form-control" />
+                {% if error_domain %}
+                  <div class="text-danger">{{ error_domain }}</div>
+                {% endif %}
+            </div>
+            <div class="col-sm-4">
+              <input disabled type="text" value=".{{ host }}" id="input-domain" class="form-control" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-company-name">{{ entry_config_name }}</label>
+            <div class="col-sm-10">
+              <input type="text" name="config_name" value="{{ config_name }}" id="input-company-name" class="form-control" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-config-telephone">{{ entry_config_phone }}</label>
+            <div class="col-sm-10">
+              <input type="text" name="config_telephone" value="{{ config_telephone }}" id="input-config-telephone" class="form-control" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-company-address">{{ entry_config_address }}</label>
+            <div class="col-sm-10">
+              <input type="text" name="config_address" value="{{ config_address }}" id="input-company-address" class="form-control" />
+            </div>
+          </div>
+        </fieldset>
+        <div class="buttons">
+          <div class="pull-left"><a href="{{ back }}" class="btn btn-default">{{ button_back }}</a></div>
+          <div class="pull-right">
+            <input type="submit" value="{{ button_continue }}" class="btn btn-primary" />
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="col-sm-3">{{ column_left }}</div>
+  </div>
+</div>
+{{ footer }}

@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+    <name>lightflat</name>
+    <code>lightflat</code>
+    <version>1.0</version>
+    <author>MF</author>
+    <file path="catalog/controller/common/menu.php">
+        <operation>
+            <search><![CDATA[
+            $children_data[] = array(
+            ]]></search>
+            <add position="before"><![CDATA[
+            if ($this->config->get('config_theme') == 'lightflat') {
+                $subchildren_data = array();
+                $subchildren = $this->model_catalog_category->getCategories($child['category_id']);
+                foreach ($subchildren as $subchild) {
+                    $filter_data = array(
+                        'filter_category_id'  => $subchild['category_id'],
+                        'filter_sub_category' => true
+                    );
+                    $subchildren_data[] = array(
+                        'name'  => $subchild['name'] . ($this->config->get('config_product_count') ? ' (' . $this->model_catalog_product->getTotalProducts($filter_data) . ')' : ''),
+                        'href'  => $this->url->link('product/category', 'path=' . $child['category_id'] . '_' . $subchild['category_id']),
+                    );
+                }
+		    }
+            ]]></add>
+        </operation>
+
+        <operation>
+            <search><![CDATA[
+            $data['categories'][] = array(
+            ]]></search>
+            <add position="before"><![CDATA[
+            if ($this->config->get('config_theme') == 'lightflat') {
+                if ($category['image']) {
+                    $category_thumb = $this->model_tool_image->resize($category['image'], 200, 400);
+                } else {
+                    $category_thumb = '';
+                }
+			}
+            ]]></add>
+        </operation>
+
+        <operation>
+            <search><![CDATA[
+            $children_data[] = array(
+            ]]></search>
+            <add position="before"><![CDATA[
+            if ($this->config->get('config_theme') == 'lightflat') {
+                if ($child['image']) {
+                    $child_thumb = $this->model_tool_image->resize($child['image'], 100, 100);
+                } else {
+                    $child_thumb = '';
+                }
+			}
+            ]]></add>
+        </operation>
+
+        <operation>
+            <search><![CDATA[
+            'children' => $children_data,
+            ]]></search>
+            <add position="before"><![CDATA[
+            'thumb' => (isset($category_thumb) ? $category_thumb : ''),
+            ]]></add>
+        </operation>
+
+        <operation>
+            <search><![CDATA[
+            $children_data[] = array(
+            ]]></search>
+            <add position="after"><![CDATA[
+            'thumb' => (isset($child_thumb) ? $child_thumb : ''),
+            ]]></add>
+        </operation>
+
+        <operation>
+            <search><![CDATA[$children_data[] = array(]]>
+            </search>
+            <add position="after"><![CDATA[
+            'subchildren' => (isset($subchildren_data) ? $subchildren_data : ''),]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[
+            $this->load->model('catalog/product');
+            ]]></search>
+            <add position="after"><![CDATA[
+            $this->load->model('tool/image');
+            ]]></add>
+        </operation>
+    </file>
+     <!-- Изображения категорий-->
+    	<file path="catalog/controller/product/category.php">
+    <operation>
+      <search><![CDATA[
+        $data['categories'][] = array(
+      ]]></search>
+      <add position="before"><![CDATA[
+        if ($this->config->get('config_theme') == 'lightflat') {
+            if ($result['image']) {
+                $image = $this->model_tool_image->resize($result['image'], 100, 80);
+            } else {
+                $image = $this->model_tool_image->resize('placeholder.png', 100, 80);
+            }
+		}
+      ]]></add>
+    </operation>
+    <operation>
+      <search><![CDATA[
+        $data['categories'][] = array(
+      ]]></search>
+      <add position="after"><![CDATA[
+        'thumb' => (isset($image) ? $image : ''),
+      ]]></add>
+    </operation>
+  </file>
+    <!-- Контакты в футоре -->
+    <file path="catalog/language/en-gb/common/footer.php">
+        <operation>
+            <search><![CDATA[
+            $_['text_information']  = 'Information';
+            ]]></search>
+            <add position="after"><![CDATA[
+            $_['text_contacts'] = 'Contacts';
+            ]]></add>
+        </operation>
+    </file>
+    <file path="catalog/language/ru-ru/common/footer.php">
+        <operation>
+            <search><![CDATA[
+            $_['text_information']  = 'Информация';
+            ]]></search>
+            <add position="after"><![CDATA[
+            $_['text_contacts'] = 'Контакты';
+            ]]></add>
+        </operation>
+    </file>
+    <file path="catalog/controller/common/footer.php">
+        <operation>
+            <search><![CDATA[
+            $this->load->language('common/footer');
+            ]]></search>
+            <add position="after"><![CDATA[
+            $data['text_contacts'] = $this->language->get('text_contacts');
+            ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[
+            $data['contact'] = $this->url->link('information/contact');
+            ]]></search>
+            <add position="after"><![CDATA[
+            $data['telephone'] = $this->config->get('config_telephone');
+            $data['email'] = $this->config->get('config_email');
+            $data['address'] = $this->config->get('config_address');
+            $data['open'] = $this->config->get('config_open');
+            ]]></add>
+        </operation>
+    </file>
+    <!-- Bag banner -->
+    <file path="catalog/view/theme/*/template/extension/module/banner.twig">
+		<operation>
+            <search><![CDATA[
+                <div id="banner{{ module }}" class="owl-carousel">
+            ]]></search>
+            <add position="replace"><![CDATA[
+                {% if  (count{{ banners }} > 1) %}
+				<div id="banner{{ module }}" class="owl-carousel">
+				{% else %}
+				<div id="banner{{ module }}" >
+				{% endif %}
+            ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[
+                <script type="text/javascript"><!--
+            ]]></search>
+            <add position="replace"><![CDATA[
+                {% if  count{{ banners}} > 1 %}
+				<script type="text/javascript"><!--
+            ]]></add>
+        </operation>
+		<operation>
+            <search><![CDATA[
+                --></script>
+            ]]></search>
+            <add position="replace"><![CDATA[
+                --></script>
+				{% endif %}
+            ]]></add>
+        </operation>
+    </file>
+    <!-- Social footer-->
+    <file path="admin/view/template/setting/setting.twig">
+        <operation>
+            <search><![CDATA[
+               <div class="text-danger">{{ error_email }}</div>
+            ]]></search>
+            <add position="after" offset="2"><![CDATA[
+                <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-facebook">{{ entry_facebook }}</label>
+                <div class="col-sm-10">
+                  <input type="text" name="config_facebook" value="{{ config_facebook }}"  placeholder="{{ entry_facebook }}" id="input-facebook" class="form-control" />
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-vk">{{ entry_vk }}</label>
+                <div class="col-sm-10">
+                  <input type="text" name="config_vk" value="{{ config_vk }}"  placeholder="{{ entry_vk }}" id="input-vk" class="form-control" />
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-odnoclass">{{ entry_odnoclass }}</label>
+                <div class="col-sm-10">
+                  <input type="text" name="config_odnoclass" value="{{ config_odnoclass }}" placeholder="{{ entry_odnoclass }}" id="input-odnoclass" class="form-control" />
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-youtube">{{ entry_youtube }}</label>
+                <div class="col-sm-10">
+                  <input type="text" name="config_youtube" value="{{ config_youtube }}" placeholder="{{ entry_youtube }}" id="input-youtube" class="form-control" />
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-twitter">{{ entry_twitter }}</label>
+                <div class="col-sm-10">
+                  <input type="text" name="config_twitter" value="{{ config_twitter }}" placeholder="{{ entry_twitter }}" id="input-twitter" class="form-control" />
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-instagram">{{ entry_instagram }}</label>
+                <div class="col-sm-10">
+                  <input type="text" name="config_instagram" value="{{ config_instagram }}"  placeholder="{{ entry_instagram }}" id="input-instagram" class="form-control" />
+                </div>
+              </div>
+            ]]></add>
+        </operation>
+    </file>
+    <file path="admin/language/en-gb/setting/{setting,store}.php">
+        <operation>
+            <search><![CDATA[$_['entry_email']]]></search>
+            <add position="after"><![CDATA[
+                $_['entry_facebook']            = 'Facebook';
+                $_['entry_vk']                  = 'VK';
+                $_['entry_odnoclass']           = 'Ok';
+                $_['entry_youtube']             = 'YouTube';
+                $_['entry_twitter']             = 'Twitter';
+                $_['entry_instagram']           = 'Instagram';
+            ]]></add>
+        </operation>
+    </file>
+    <file path="admin/language/ru-ru/setting/{setting,store}.php">
+        <operation>
+            <search><![CDATA[$_['entry_email']]]></search>
+            <add position="after"><![CDATA[
+                $_['entry_facebook']            = 'Facebook';
+                $_['entry_vk']                  = 'Вконтакте';
+                $_['entry_odnoclass']           = 'Одноклассники';
+                $_['entry_youtube']             = 'YouTube';
+                $_['entry_twitter']             = 'Twitter';
+                $_['entry_instagram']           = 'Instagram';
+            ]]></add>
+        </operation>
+    </file>
+    
+    <file path="admin/controller/setting/setting.php">
+        <operation>
+            <search><![CDATA[
+                $this->load->language('setting/setting');
+            ]]></search>
+            <add position="after"><![CDATA[
+                $data['entry_facebook'] = $this->language->get('entry_facebook');
+                $data['entry_vk'] = $this->language->get('entry_vk');
+                $data['entry_odnoclass'] = $this->language->get('entry_odnoclass');
+                $data['entry_youtube'] = $this->language->get('entry_youtube');
+                $data['entry_twitter'] = $this->language->get('entry_twitter');
+                $data['entry_instagram'] = $this->language->get('entry_instagram');
+            ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[
+                if (isset($this->request->post['config_email'])) {  
+            ]]></search>
+            <add position="before"><![CDATA[
+                if (isset($this->request->post['config_facebook'])) {
+			    $data['config_facebook'] = $this->request->post['config_facebook'];
+		        } else {
+			    $data['config_facebook'] = $this->config->get('config_facebook');
+		        }
+
+                if (isset($this->request->post['config_vk'])) {
+			    $data['config_vk'] = $this->request->post['config_vk'];
+		        } else {
+			    $data['config_vk'] = $this->config->get('config_vk');
+		        }
+
+                if (isset($this->request->post['config_odnoclass'])) {
+			    $data['config_odnoclass'] = $this->request->post['config_odnoclass'];
+		        } else {
+			    $data['config_odnoclass'] = $this->config->get('config_odnoclass');
+		        }
+
+                if (isset($this->request->post['config_youtube'])) {
+			    $data['config_youtube'] = $this->request->post['config_youtube'];
+		        } else {
+			    $data['config_youtube'] = $this->config->get('config_youtube');
+		        }
+
+                if (isset($this->request->post['config_twitter'])) {
+			    $data['config_twitter'] = $this->request->post['config_twitter'];
+		        } else {
+			    $data['config_twitter'] = $this->config->get('config_twitter');
+		        }
+
+                if (isset($this->request->post['config_instagram'])) {
+			    $data['config_instagram'] = $this->request->post['config_instagram'];
+		        } else {
+			    $data['config_instagram'] = $this->config->get('config_instagram');
+		        }
+            ]]></add>
+        </operation>
+    </file>
+    <file path="catalog/controller/common/footer.php">
+        <operation>
+            <search><![CDATA[
+                $data['powered'] = sprintf($this->language->get('text_powered'), $this->config->get('config_name'), date('Y', time()));
+            ]]></search>
+            <add position="before"><![CDATA[
+                $data['facebook'] = $this->config->get('config_facebook');  
+                $data['vk'] = $this->config->get('config_vk');  
+                $data['odnoclass'] = $this->config->get('config_odnoclass');  
+                $data['youtube'] = $this->config->get('config_youtube');  
+                $data['twitter'] = $this->config->get('config_twitter');  
+                $data['instagram'] = $this->config->get('config_instagram');
+            ]]></add>
+        </operation>
+    </file>
+    <!-- Owl carousel-->
+    <file path="catalog/controller/extension/module/{banner,slideshow,carousel}.php">
+        <operation>
+            <search><![CDATA[
+                $this->document->addStyle('catalog/view/javascript/jquery/swiper/css/swiper.min.css');   
+            ]]></search>
+            <add position="before"><![CDATA[
+            if ($this->config->get('config_theme') == 'lightflat') {
+                $this->document->addStyle('catalog\view\theme\lightflat\js\jquery\owl-carousel/owl.carousel.css');
+		        $this->document->addStyle('catalog\view\theme\lightflat\js\jquery\owl-carousel/owl.transitions.css');
+		        $this->document->addScript('catalog\view\theme\lightflat\js\jquery\owl-carousel/owl.carousel.min.js');   
+            }
+            ]]></add>
+        </operation>
+    </file>
+</modification>

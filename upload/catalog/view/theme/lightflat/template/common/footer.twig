@@ -1,0 +1,83 @@
+<footer>
+  <div class="container">
+    <div class="row">
+      {% if informations %}
+      <div class="col-sm-3">
+        <h5>{{ text_information }}</h5>
+        <ul class="list-unstyled">
+         {% for information in informations %}
+          <li><a href="{{ information.href }}">{{ information.title }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endif %}
+      <div class="col-sm-3">
+        <h5>{{ text_extra }}</h5>
+        <ul class="list-unstyled">
+          <li><a href="{{ manufacturer }}">{{ text_manufacturer }}</a></li>
+          <li><a href="{{ voucher }}">{{ text_voucher }}</a></li>
+          <li><a href="{{ affiliate }}">{{ text_affiliate }}</a></li>
+          <li><a href="{{ special }}">{{ text_special }}</a></li>
+        </ul>
+      </div>
+      <div class="col-sm-3">
+        <h5>{{ text_account }}</h5>
+        <ul class="list-unstyled">
+          <li><a href="{{ account }}">{{ text_account }}</a></li>
+          <li><a href="{{ order }}">{{ text_order }}</a></li>
+          <li><a href="{{ wishlist }}">{{ text_wishlist }}</a></li>
+          <li><a href="{{ newsletter }}">{{ text_newsletter }}</a></li>
+        </ul>
+      </div>
+      <div class="col-sm-3 footer_info">
+        <h5>{{ text_contacts }}</h5>
+        <ul class="list-unstyled">
+          <li>{{ telephone }}</li>
+          <li>{{ email }}</li>
+          <li>{{ address }}</li>
+          <li>{{ open }}</li>
+        </ul>
+      </div>
+    </div>
+    <div class="row social_block">
+      <ul class="list-unstyled social_block_list">
+        {% if facebook %}
+          <li><a href="{{ facebook }}"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
+        {% endif %}
+        {% if vk %}
+          <li><a href="{{ vk }}"><i class="fa fa-vk" aria-hidden="true"></i></a></li>
+        {% endif %}
+        {% if odnoclass %}
+          <li><a href="{{ odnoclass }}"><i class="fa fa-odnoklassniki" aria-hidden="true"></i></a></li>
+        {% endif %}
+        {% if youtube %}
+          <li><a href="{{ youtube }}"><i class="fa fa-youtube-play" aria-hidden="true"></i></a></li>
+        {% endif %}
+        {% if twitter %}
+          <li><a href="{{ twitter }}"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+        {% endif %}
+        {% if instagram %}
+          <li><a href="{{ instagram }}"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
+        {% endif %}
+        {% if google %}
+          <li><a href="{{ google }}"><i class="fa fa-google-plus" aria-hidden="true"></i></a></li>
+        {% endif %}
+      </ul>
+      </div>
+    <p>{{ powered }}</p>
+  </div>
+</footer>
+
+<!-- Button scroll -->
+  <button id="up" class="button_up_scroll hidden-xs">
+    <i class="fa fa-angle-up" aria-hidden="true"></i>
+  </button>
+  
+{% for script in scripts %}
+<script src="{{ script }}" type="text/javascript"></script>
+{% endfor %}
+<!--
+OpenCart is open source software and you are free to remove the powered by OpenCart if you want, but its generally accepted practise to make a small donation.
+Please donate via PayPal to donate@opencart.com
+//-->
+</body></html>

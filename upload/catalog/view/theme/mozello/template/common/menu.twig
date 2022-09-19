@@ -1,0 +1,12 @@
+{% if categories %}
+  <ul class="menu">
+      {% for category in categories %}
+        <li><a href="{{ category.href }}">{{ category.name }}</a></li>
+      {% endfor %}
+  </ul>
+{% endif %}
+
+<ul class="menu">
+      <li><a class="selected" href="/">Главная</a></li>
+      <li><a href="/ceny">Цены</a></li>
+</ul>

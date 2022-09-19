@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<!--[if IE 8 ]><html dir="{{ direction }}" lang="{{ lang }}" class="ie8"><![endif]-->
+<!--[if IE 9 ]><html dir="{{ direction }}" lang="{{ lang }}" class="ie9"><![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!-->
+<html dir="{{ direction }}" lang="{{ lang }}">
+<!--<![endif]-->
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>{{ title }}</title>
+  <base href="{{ base }}" />
+  {% if description %}
+    <meta name="description" content="{{ description }}" />
+  {% endif %}
+  {% if keywords %}
+    <meta name="keywords" content="{{ keywords }}" />
+  {% endif %}
+  <script src="catalog/view/javascript/jquery/jquery-2.1.1.min.js" type="text/javascript"></script>
+  <link href="catalog/view/javascript/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen" />
+  <script src="catalog/view/javascript/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+  <link href="catalog/view/javascript/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+  <link href="//fonts.googleapis.com/css?family=Open+Sans:400,400i,300,700" rel="stylesheet" type="text/css" />
+  <link href="catalog/view/theme/default/stylesheet/stylesheet.css" rel="stylesheet">
+
+  <link href="https://dss4hwpyv4qfp.cloudfront.net/mozello.ico" rel="shortcut icon" />
+  <link href="https://dss4hwpyv4qfp.cloudfront.net/libs/fonts/greycliff/greycliff-all.css?1" rel="stylesheet" type="text/css" />
+  <link href="https://dss4hwpyv4qfp.cloudfront.net/website/uikit/css/uikit.min.css?v=1.903" rel="stylesheet" type="text/css" />
+  <link href="https://dss4hwpyv4qfp.cloudfront.net/website/css/website.css?v=1.903" rel="stylesheet" type="text/css" />
+
+  <link href="catalog/view/theme/mozello/stylesheet/stylesheet.css" rel="stylesheet">
+  {% for style in styles %}
+    <link href="{{ style.href }}" type="text/css" rel="{{ style.rel }}" media="{{ style.media }}" />
+  {% endfor %}
+  <script src="catalog/view/javascript/common.js" type="text/javascript"></script>
+  {% for script in scripts %}
+    <script src="{{ script }}" type="text/javascript"></script>
+  {% endfor %}
+  {% for link in links %}
+    <link href="{{ link.href }}" rel="{{ link.rel }}" />
+  {% endfor %}
+  {% for analytic in analytics %}
+      {{ analytic }}
+  {% endfor %}
+</head>
+
+<body class=" slicedpage" lang="{{ lang }}">
+
+<div id="wrapper">
+
+  <!-- Header -->
+  <div id="header">
+
+    <div id="headerMenu">
+      <div class="inner">
+        {% if logo %}<a href="{{ home }}"><img id="logo" src="{{ logo }}" title="{{ name }}" alt="{{ name }}" class="img-responsive" /></a>{% else %}
+          <h1><a href="{{ home }}">{{ name }}</a></h1>
+        {% endif %}
+        {{ menu }}
+        <nav id="rightNav">
+          {{ language }}
+
+          <div id="topButtons">
+            <a id="menuOpener"></a>
+            <a class="button top" href="tel:{{ telephone }}"><i class="fa fa-whatsapp"></i> <i class="fa fa-phone"></i> {{ telephone }}</a>
+            <a class="button top" href="https://noticeup.kz/admin/">Войти</a>
+            <a class="button top signup" href="https://noticeup.kz/install">Регистрация</a>
+          </div>
+        </nav>
+        <div style="clear: both"></div>
+      </div>
+    </div>
+
+    <div id="mobileMenu">
+      <a id="menuCloser"></a>
+      {{ menu }}
+      <br>
+      <a class="button top" href="tel:{{ telephone }}"><i class="fa fa-whatsapp"></i> <i class="fa fa-phone"></i> {{ telephone }}</a>
+    </div>
+    <script>
+        $('#menuOpener').click(function(){
+            $('#mobileMenu').css('display','block');
+        });
+        $('#menuCloser').click(function(){
+            $('#mobileMenu').css('display','none');
+        });
+    </script>
+  </div>
