@@ -12,7 +12,7 @@ class ModelInstallInstall extends Model {
         $this->cache->delete('store');
 
         // Layout Route
-        $query = $this->db->query("SELECT * FROM " . DB_PREFIX . "layout_route WHERE store_id = '1'");
+        $query = $this->db->query("SELECT * FROM " . DB_PREFIX . "layout_route WHERE store_id = '2'");
 
         foreach ($query->rows as $layout_route) {
             $this->db->query("INSERT INTO " . DB_PREFIX . "layout_route SET layout_id = '" . (int)$layout_route['layout_id'] . "', route = '" . $this->db->escape($layout_route['route']) . "', store_id = '" . (int)$store_id . "'");
@@ -35,7 +35,7 @@ class ModelInstallInstall extends Model {
         $this->db->query("INSERT INTO `" . DB_PREFIX . "user` SET username = '" . $this->db->escape($username) . "', user_group_id = '" . (int)$user_group_id . "', salt = '" . $this->db->escape($salt = token(9)) . "', password = '" . $this->db->escape(sha1($salt . sha1($salt . sha1($data['password'])))) . "', firstname = '" . $this->db->escape($data['firstname']) . "', lastname = '" . $this->db->escape($data['lastname']) . "', email = '" . $this->db->escape($this->session->data['email']) . "', image = '', status = '1', date_added = NOW(), store_id ='".(int)$store_id."'");
 
         // Setting
-        $query = $this->db->query("SELECT * FROM " . DB_PREFIX . "setting WHERE store_id = '1'");
+        $query = $this->db->query("SELECT * FROM " . DB_PREFIX . "setting WHERE store_id = '2'");
 
         foreach ($query->rows as $setting) {
             if (in_array($setting['key'], array('config_url', 'config_ssl'))) {
@@ -153,8 +153,13 @@ class ModelInstallInstall extends Model {
                     $this->db->query("INSERT INTO " . DB_PREFIX . "product_related SET product_id = '" . (int)$related_id . "', related_id = '" . (int)$product_id . "'");
                 }
             }
-
         }
+
+        $directory = DIR_IMAGE . 'catalog';
+        $folder = 'store_'.$store_id;
+        @mkdir($directory . '/' . $folder, 0755);
+        @chmod($directory . '/' . $folder, 0755);
+        @touch($directory . '/' . $folder . '/' . 'index.html');
 
         $this->session->data['catalog'] = $url;
         $this->session->data['username'] = $username;

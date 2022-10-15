@@ -142,7 +142,7 @@ class ModelStoreManufacturer extends Model {
 	}
 	
 	public function getTotalManufacturers() {
-		$query = $this->db->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "manufacturer");
+		$query = $this->db->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "manufacturer m  LEFT JOIN " . DB_PREFIX . "manufacturer_to_store m2s ON (m2s.manufacturer_id = m.manufacturer_id) WHERE m2s.store_id = '" . (int)$this->store_id . "'");
 
 		return $query->row['total'];
 	}

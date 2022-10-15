@@ -35,7 +35,7 @@ class ControllerStoreSettingStore extends Controller {
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
             $parse_url = parse_url(HTTP_CATALOG);
 
-            $url = 'http://' . $this->request->post['subdomain'] . '.' . $parse_url['host'] . $parse_url['path'];
+            $url = 'https://' . $this->request->post['subdomain'] . '.' . $parse_url['host'] . $parse_url['path'];
 
             $this->request->post['config_url'] = $url;
             $this->request->post['config_ssl'] = $config['config_ssl'];
@@ -290,6 +290,8 @@ class ControllerStoreSettingStore extends Controller {
 		$extensions = $this->model_setting_extension->getInstalled('theme');
 
 		foreach ($extensions as $code) {
+            if ($code == 'mozello') continue;
+
 			$this->load->language('extension/theme/' . $code, 'extension');
 
 			$data['themes'][] = array(
@@ -676,7 +678,7 @@ class ControllerStoreSettingStore extends Controller {
         } elseif (isset($store_info['config_url'])) {
             $data['scheme'] = $parse_url['scheme'] . '://';
         } else {
-            $data['scheme'] = 'http://';
+            $data['scheme'] = 'https://';
         }
 
         if (isset($this->request->post['subdomain'])) {
@@ -690,6 +692,8 @@ class ControllerStoreSettingStore extends Controller {
         } elseif (isset($store_info['config_url'])) {
             $data['domain'] = stristr($parse_url['host'], '.');
         }
+
+        $data['manager_link'] = "https://wa.me/77073335092?text=" . urlencode('Добрый день! Пишу по вопросу домена');
 
 
 		$data['header'] = $this->load->controller('common/header');
@@ -707,7 +711,7 @@ class ControllerStoreSettingStore extends Controller {
 		if (!$this->request->post['subdomain']) {
 			$this->error['url'] = $this->language->get('error_url');
 		} else {
-            $parse_url = parse_url(HTTP_CATALOG);
+            $parse_url = parse_url(HTTPS_CATALOG);
 
             $url = $parse_url['scheme'] . '://' . $this->request->post['subdomain'] . '.' . $parse_url['host'] . $parse_url['path'];
 

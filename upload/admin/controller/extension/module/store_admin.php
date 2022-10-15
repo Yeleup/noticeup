@@ -166,7 +166,7 @@ class ControllerExtensionModuleStoreAdmin extends Controller {
 	
 	public function uninstall() {  
 		//Delete Store admin user group
-		$query = $this->db->query("DELETE FROM ". DB_PREFIX ."user_group WHERE name='Store admin'");		
+		//$query = $this->db->query("DELETE FROM ". DB_PREFIX ."user_group WHERE name='Store admin'");
 	}
 
 	public function delete() { 
