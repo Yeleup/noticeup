@@ -33,4 +33,45 @@ class ModelStoreUserUser extends Model {
 			$this->db->query("UPDATE `" . DB_PREFIX . "user` SET salt = '" . $this->db->escape($salt = token(9)) . "', password = '" . $this->db->escape(sha1($salt . sha1($salt . sha1($data['password'])))) . "' WHERE user_id = '" . (int)$user_id . "'");
 		}
 	}
+
+    public function getUsers($data = array()) {
+        $sql = "SELECT * FROM `" . DB_PREFIX . "user` u";
+
+        $sql .= " LEFT JOIN `" . DB_PREFIX . "store` s ON s.store_id = u.store_id";
+
+        $sort_data = array(
+            'u.username',
+            'u.status',
+            'u.date_added'
+        );
+
+        if (isset($data['sort']) && in_array($data['sort'], $sort_data)) {
+            $sql .= " ORDER BY " . $data['sort'];
+        } else {
+            $sql .= " ORDER BY u.date_added";
+        }
+
+        if (isset($data['order']) && ($data['order'] == 'DESC')) {
+            $sql .= " DESC";
+        } else {
+            $sql .= " ASC";
+        }
+
+        if (isset($data['start']) || isset($data['limit'])) {
+            if ($data['start'] < 0) {
+                $data['start'] = 0;
+            }
+
+            if ($data['limit'] < 1) {
+                $data['limit'] = 20;
+            }
+
+            $sql .= " LIMIT " . (int)$data['start'] . "," . (int)$data['limit'];
+        }
+
+
+        $query = $this->db->query($sql);
+
+        return $query->rows;
+    }
 }

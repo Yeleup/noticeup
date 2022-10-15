@@ -39,30 +39,19 @@
           </ul>
           <div class="tab-content">
             <div class="tab-pane active" id="tab-general">
-              {% if (config_secure) %}
-                <div class="form-group">
-                  <label class="col-sm-2 control-label" for="input-ssl"><span data-toggle="tooltip" data-html="true" title="{{ help_ssl }}">{{ entry_ssl }}</span></label>
-                  <div class="col-sm-5">
-                    <input readonly type="text" name="config_ssl" value="{{ config_ssl }}" placeholder="{{ entry_ssl }}" id="input-ssl" class="form-control" />
-                  </div>
-                </div>
-              {% endif %}
               <div class="form-group required">
                 <label class="col-sm-2 control-label" for="input-url"><span data-toggle="tooltip" data-html="true" title="{{ help_url|escape('html') }}">{{ entry_url }}</span></label>
-                <div class="col-sm-1">
-                  <input type="text" name="schema" class="form-control" value="{{ scheme }}" readonly/>
-                </div>
-                <div class="col-sm-2">
-                  <input type="text" name="subdomain" value="{{ subdomain }}" placeholder="{{ entry_url }}" {{ config_secure ? 'readonly' : '' }} class="form-control" />
+                <div class="col-sm-10">
+                  <input type="text" name="config_url" value="{{ config_url }}" placeholder="{{ entry_url }}" id="input-url" class="form-control" />
                   {% if error_url %}
                     <div class="text-danger">{{ error_url }}</div>
                   {% endif %}
                 </div>
-                <div class="col-sm-2">
-                  <input type="text" name="domain" class="form-control" value="{{ domain }}" readonly/>
-                </div>
-                <div class="col-sm-2">
-                  <span data-toggle="tooltip" data-html="true" title="Вы можете использовать любое доменное имя, которым вы владеете или собираетесь приобрести"><a target="_blank" href="{{ manager_link }}">Хочу поставить свой домен?</a></span>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-ssl"><span data-toggle="tooltip" data-html="true" title="{{ help_ssl }}">{{ entry_ssl }}</span></label>
+                <div class="col-sm-10">
+                  <input type="text" name="config_ssl" readonly value="{{ config_ssl }}" placeholder="{{ entry_ssl }}" id="input-ssl" class="form-control" />
                 </div>
               </div>
               <div class="form-group required">

@@ -40,6 +40,8 @@
                     {% else %}
                     <a href="{{ sort_username }}">{{ column_username }}</a>
                     {% endif %}</td>
+                  <td class="text-left">E-Mail</td>
+                  <td class="text-left">URL магазина</td>
                   <td class="text-left">{% if sort == 'status' %}
                     <a href="{{ sort_status }}" class="{{ order|lower }}">{{ column_status }}</a>
                     {% else %}
@@ -63,6 +65,8 @@
                     <input type="checkbox" name="selected[]" value="{{ user.user_id }}" />
                     {% endif %}</td>
                   <td class="text-left">{{ user.username }}</td>
+                  <td class="text-left">{{ user.email }}</td>
+                  <td class="text-left"><a href="{{ user.store_link }}">{{ user.url }}</a></td>
                   <td class="text-left">{{ user.status }}</td>
                   <td class="text-left">{{ user.date_added }}</td>
                   <td class="text-right"><a href="{{ user.edit }}" data-toggle="tooltip" title="{{ button_edit }}" class="btn btn-primary"><i class="fa fa-pencil"></i></a></td>

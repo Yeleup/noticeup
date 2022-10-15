@@ -119,7 +119,7 @@ class ControllerStoreUserUser extends Controller {
 		if (isset($this->request->get['sort'])) {
 			$sort = $this->request->get['sort'];
 		} else {
-			$sort = 'username';
+			$sort = 'u.date_added';
 		}
 
 		if (isset($this->request->get['order'])) {
@@ -174,10 +174,14 @@ class ControllerStoreUserUser extends Controller {
 
 		$user_total = $this->model_user_user->getTotalUsers();
 
-		$results = $this->model_user_user->getUsers($filter_data);
+		$results = $this->model_store_user_user->getUsers($filter_data);
 
 		foreach ($results as $result) {
 			$data['users'][] = array(
+				'store_id'   => $result['store_id'],
+				'store_link' => $this->url->link('setting/store/edit', 'user_token=' . $this->session->data['user_token']. '&store_id=' . $result['store_id'], true),
+				'url'        => $result['url'],
+				'email'      => $result['email'],
 				'user_id'    => $result['user_id'],
 				'username'   => $result['username'],
 				'status'     => ($result['status'] ? $this->language->get('text_enabled') : $this->language->get('text_disabled')),

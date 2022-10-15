@@ -33,13 +33,6 @@ class ControllerStoreSettingStore extends Controller {
 		$this->load->model('store_setting/store');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-            $parse_url = parse_url(HTTP_CATALOG);
-
-            $url = 'https://' . $this->request->post['subdomain'] . '.' . $parse_url['host'] . $parse_url['path'];
-
-            $this->request->post['config_url'] = $url;
-            $this->request->post['config_ssl'] = $config['config_ssl'];
-            $this->request->post['config_secure'] = $config['config_secure'];
             $this->request->post['config_layout_id'] = $config['config_layout_id'];
 
             // Меняем макет шаблона
@@ -238,7 +231,6 @@ class ControllerStoreSettingStore extends Controller {
 		} else {
 			$data['config_url'] = '';
 		}
-
 
         if (isset($this->request->post['config_ssl'])) {
             $data['config_ssl'] = $this->request->post['config_ssl'];
@@ -696,9 +688,9 @@ class ControllerStoreSettingStore extends Controller {
         $data['manager_link'] = "https://wa.me/77073335092?text=" . urlencode('Добрый день! Пишу по вопросу домена');
 
 
-		$data['header'] = $this->load->controller('common/header');
-		$data['column_left'] = $this->load->controller('common/column_left');
-		$data['footer'] = $this->load->controller('common/footer');
+        $data['header'] = $this->load->controller('common/header');
+        $data['column_left'] = $this->load->controller('common/column_left');
+        $data['footer'] = $this->load->controller('common/footer');
 
 		$this->response->setOutput($this->load->view('store_setting/store_form', $data));
 	}
@@ -708,14 +700,10 @@ class ControllerStoreSettingStore extends Controller {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
 
-		if (!$this->request->post['subdomain']) {
+		if (!$this->request->post['config_url']) {
 			$this->error['url'] = $this->language->get('error_url');
 		} else {
-            $parse_url = parse_url(HTTPS_CATALOG);
-
-            $url = $parse_url['scheme'] . '://' . $this->request->post['subdomain'] . '.' . $parse_url['host'] . $parse_url['path'];
-
-            $query = $this->db->query("SELECT DISTINCT * FROM " . DB_PREFIX . "store WHERE `store_id` <> '" . (int)$this->request->get['store_id'] . "' AND `url` = '" . $this->db->escape($url) . "'");
+            $query = $this->db->query("SELECT DISTINCT * FROM " . DB_PREFIX . "store WHERE `store_id` <> '" . (int)$this->request->get['store_id'] . "' AND `url` = '" . $this->db->escape($this->request->post['config_url']) . "'");
 
             if ($query->num_rows) {
                 $this->error['url'] = 'Такой домен уже зарегистрирован';
