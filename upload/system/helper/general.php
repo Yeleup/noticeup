@@ -37,3 +37,32 @@ if(!function_exists('hash_equals')) {
 		}
 	}
 }
+
+function deleteDirectory($path) {
+    // если путь существует и это папка
+    if (file_exists($path) and is_dir($path)) {
+        // открываем папку
+        $dir = opendir($path);
+        while (false !== ($element = readdir($dir))) {
+            // удаляем только содержимое папки
+            if ($element != '.' and $element != '..') {
+                $tmp = $path . '/' . $element;
+                chmod($tmp, 0777);
+                // если элемент является папкой, то
+                // удаляем его используя нашу функцию deleteDirectory
+                if (is_dir($tmp)) {
+                    deleteDirectory($tmp);
+                    // если элемент является файлом, то удаляем файл
+                } else {
+                    unlink($tmp);
+                }
+            }
+        }
+        // закрываем папку
+        closedir($dir);
+        // удаляем саму папку
+        if (file_exists($path)) {
+            rmdir($path);
+        }
+    }
+}

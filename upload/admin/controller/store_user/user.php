@@ -87,9 +87,48 @@ class ControllerStoreUserUser extends Controller {
 		$this->document->setTitle($this->language->get('heading_title'));
 
 		$this->load->model('user/user');
+        $this->load->model('store_user/user');
+        $this->load->model('store_setting/store');
+        $this->load->model('store/manufacturer');
+        $this->load->model('store/information');
+        $this->load->model('store/category');
+        $this->load->model('store/product');
 
-		if (isset($this->request->post['selected']) && $this->validateDelete()) {
+        if (isset($this->request->post['selected']) && $this->validateDelete()) {
 			foreach ($this->request->post['selected'] as $user_id) {
+                $user = $this->model_user_user->getUser($user_id);
+
+                if ($user['store_id']) {
+                    // Delete manufacturer
+                    $query = $this->db->query("SELECT * FROM " . DB_PREFIX . "manufacturer m LEFT JOIN " . DB_PREFIX . "manufacturer_to_store m2s ON (m.manufacturer_id = m2s.manufacturer_id) WHERE m2s.store_id = '" . (int)$user['store_id'] . "'");
+                    foreach ($query->rows as $manufacturer) {
+                        $this->model_store_manufacturer->deleteManufacturer($manufacturer['manufacturer_id']);
+                    }
+
+                    // Delete information
+                    $query = $this->db->query("SELECT * FROM " . DB_PREFIX . "information i LEFT JOIN " . DB_PREFIX . "information_to_store i2s ON (i.information_id = i2s.information_id) WHERE i2s.store_id = '" . (int)$user['store_id'] . "'");
+                    foreach ($query->rows as $information) {
+                        $this->model_store_information->deleteInformation($information['information_id']);
+                    }
+
+                    // Delete categories
+                    $query = $this->db->query("SELECT * FROM " . DB_PREFIX . "category c LEFT JOIN " . DB_PREFIX . "category_to_store c2s ON (c.category_id = c2s.category_id) WHERE c2s.store_id = '" . (int)$user['store_id'] . "'");
+                    foreach ($query->rows as $category) {
+                        $this->model_store_category->deleteCategory($category['category_id']);
+                    }
+
+                    // Delete products
+                    $query = $this->db->query("SELECT * FROM " . DB_PREFIX . "product p LEFT JOIN " . DB_PREFIX . "product_to_store p2s ON (p.product_id = p2s.product_id) WHERE p2s.store_id = '". (int)$user['store_id'] ."'");
+                    foreach ($query->rows as $product) {
+                        $this->model_store_product->deleteProduct($product['product_id']);
+                    }
+
+                    // Delete store
+                    $this->model_store_setting_store->deleteStore($user['store_id']);
+
+                    deleteDirectory(DIR_IMAGE . 'catalog/store_' . $user['store_id']);
+                }
+                // Delete user
 				$this->model_user_user->deleteUser($user_id);
 			}
 
