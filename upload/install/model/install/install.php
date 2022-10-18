@@ -1,5 +1,7 @@
 <?php
 class ModelInstallInstall extends Model {
+    const DEFAULT_STORE = 2;
+
 	public function database($data) {
         $host = parse_url(HTTP_SERVER)['host'];
 
@@ -12,7 +14,7 @@ class ModelInstallInstall extends Model {
         $this->cache->delete('store');
 
         // Layout Route
-        $query = $this->db->query("SELECT * FROM " . DB_PREFIX . "layout_route WHERE store_id = '2'");
+        $query = $this->db->query("SELECT * FROM " . DB_PREFIX . "layout_route WHERE store_id = '". self::DEFAULT_STORE ."'");
 
         foreach ($query->rows as $layout_route) {
             $this->db->query("INSERT INTO " . DB_PREFIX . "layout_route SET layout_id = '" . (int)$layout_route['layout_id'] . "', route = '" . $this->db->escape($layout_route['route']) . "', store_id = '" . (int)$store_id . "'");
@@ -35,7 +37,7 @@ class ModelInstallInstall extends Model {
         $this->db->query("INSERT INTO `" . DB_PREFIX . "user` SET username = '" . $this->db->escape($username) . "', user_group_id = '" . (int)$user_group_id . "', salt = '" . $this->db->escape($salt = token(9)) . "', password = '" . $this->db->escape(sha1($salt . sha1($salt . sha1($data['password'])))) . "', firstname = '" . $this->db->escape($data['firstname']) . "', lastname = '" . $this->db->escape($data['lastname']) . "', email = '" . $this->db->escape($this->session->data['email']) . "', image = '', status = '1', date_added = NOW(), store_id ='".(int)$store_id."'");
 
         // Setting
-        $query = $this->db->query("SELECT * FROM " . DB_PREFIX . "setting WHERE store_id = '2'");
+        $query = $this->db->query("SELECT * FROM " . DB_PREFIX . "setting WHERE store_id = '". self::DEFAULT_STORE ."'");
 
         foreach ($query->rows as $setting) {
             if (in_array($setting['key'], array('config_url', 'config_ssl'))) {
@@ -58,7 +60,7 @@ class ModelInstallInstall extends Model {
         // Добавляем товары
         $this->load->model('catalog/product');
 
-        $sql = "SELECT * FROM " . DB_PREFIX . "product p LEFT JOIN " . DB_PREFIX . "product_description pd ON (p.product_id = pd.product_id) LEFT JOIN " . DB_PREFIX . "product_to_store p2s ON (p.product_id = p2s.product_id) WHERE p2s.store_id = '1'";
+        $sql = "SELECT * FROM " . DB_PREFIX . "product p LEFT JOIN " . DB_PREFIX . "product_description pd ON (p.product_id = pd.product_id) LEFT JOIN " . DB_PREFIX . "product_to_store p2s ON (p.product_id = p2s.product_id) WHERE p2s.store_id = '". self::DEFAULT_STORE ."'";
 
         $products = array();
 
@@ -72,7 +74,7 @@ class ModelInstallInstall extends Model {
         // Добавляем категорий
         $this->load->model('catalog/category');
 
-        $sql = "SELECT * FROM " . DB_PREFIX . "category c LEFT JOIN " . DB_PREFIX . "category_description cd ON (c.category_id = cd.category_id) LEFT JOIN " . DB_PREFIX . "category_to_store c2s ON (c.category_id = c2s.category_id) WHERE c2s.store_id = '1'";
+        $sql = "SELECT * FROM " . DB_PREFIX . "category c LEFT JOIN " . DB_PREFIX . "category_description cd ON (c.category_id = cd.category_id) LEFT JOIN " . DB_PREFIX . "category_to_store c2s ON (c.category_id = c2s.category_id) WHERE c2s.store_id = '". self::DEFAULT_STORE ."'";
 
         $categories = array();
 
@@ -86,7 +88,7 @@ class ModelInstallInstall extends Model {
         // Добавляем производителей
         $this->load->model('catalog/manufacturer');
 
-        $sql = "SELECT * FROM " . DB_PREFIX . "manufacturer m LEFT JOIN " . DB_PREFIX . "manufacturer_to_store m2s ON (m.manufacturer_id = m2s.manufacturer_id) WHERE m2s.store_id = '1'";
+        $sql = "SELECT * FROM " . DB_PREFIX . "manufacturer m LEFT JOIN " . DB_PREFIX . "manufacturer_to_store m2s ON (m.manufacturer_id = m2s.manufacturer_id) WHERE m2s.store_id = '". self::DEFAULT_STORE ."'";
 
         $manufacturers = array();
 
@@ -100,7 +102,7 @@ class ModelInstallInstall extends Model {
         // Добавляем статьи
         $this->load->model('catalog/information');
 
-        $sql = "SELECT * FROM " . DB_PREFIX . "information i LEFT JOIN " . DB_PREFIX . "information_to_store i2s ON (i.information_id = i2s.information_id) WHERE i2s.store_id = '1'";
+        $sql = "SELECT * FROM " . DB_PREFIX . "information i LEFT JOIN " . DB_PREFIX . "information_to_store i2s ON (i.information_id = i2s.information_id) WHERE i2s.store_id = '". self::DEFAULT_STORE ."'";
 
         $query = $this->db->query($sql);
 

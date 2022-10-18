@@ -74,6 +74,10 @@ class ControllerExtensionExtensionStoreModule extends Controller {
                     if (!in_array($extension, array('banner', 'carousel', 'slideshow', 'bestseller_carousel', 'featured_carousel', 'home_category', 'latest_carousel', 'special_carousel'))) {
                         continue;
                     }
+                } elseif ($config['config_theme'] == 'mintleaf') {
+                    if (!in_array($extension, array('banner', 'carousel', 'bestseller', 'featured', 'latest', 'slideshow', 'special'))) {
+                        continue;
+                    }
                 } else {
                     continue;
                 }

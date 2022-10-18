@@ -40,6 +40,8 @@ class ControllerStoreSettingStore extends Controller {
                 $this->db->query("UPDATE " . DB_PREFIX . "layout_route SET layout_id = 16 WHERE store_id = '" . (int)$this->request->get['store_id'] . "' AND route ='common/home'");
             } elseif ($this->request->post['config_theme'] == 'lightflat') {
                 $this->db->query("UPDATE " . DB_PREFIX . "layout_route SET layout_id = 15 WHERE store_id = '" . (int)$this->request->get['store_id'] . "' AND route ='common/home'");
+            } elseif ($this->request->post['config_theme'] == 'mintleaf') {
+                $this->db->query("UPDATE " . DB_PREFIX . "layout_route SET layout_id = 18 WHERE store_id = '" . (int)$this->request->get['store_id'] . "' AND route ='common/home'");
             }
 
             $this->model_setting_setting->editSetting('config', $this->request->post, $this->request->get['store_id']);
