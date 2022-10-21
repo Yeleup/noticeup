@@ -6,6 +6,10 @@
 # Image File
 !/upload/image/no_image.jpg
 
+# Image Catalog Files
+/upload/image/catalog/*
+!/upload/image/catalog/index.html
+
 # Image Cache Files
 /upload/image/cache/*
 !/upload/image/cache/index.html
