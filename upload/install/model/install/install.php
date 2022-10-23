@@ -85,6 +85,16 @@ class ModelInstallInstall extends Model {
             $categories[$category['category_id']] = $category_id;
         }
 
+        foreach ($categories as $key => $category_id) {
+            // SEO URL
+            $query = $this->db->query("SELECT * FROM " . DB_PREFIX . "seo_url WHERE `store_id` = '". self::DEFAULT_STORE ."' AND `query` = 'category_id=" . (int)$key . "'");
+            foreach ($query->rows as $row) {
+                $language_id = $row['language_id'];
+                $keyword = $row['keyword'];
+                $this->db->query("INSERT IGNORE INTO " . DB_PREFIX . "seo_url SET store_id = '" . (int)$store_id . "', language_id = '" . (int)$language_id . "', query = 'category_id=" . (int)$category_id . "', keyword = '" . $this->db->escape($keyword) . "'");
+            }
+        }
+
         // Добавляем производителей
         $this->load->model('catalog/manufacturer');
 
@@ -99,17 +109,39 @@ class ModelInstallInstall extends Model {
             $manufacturers[$manufacturer['manufacturer_id']] = $manufacturer_id;
         }
 
+        foreach ($manufacturers as $key => $manufacturer_id) {
+            // SEO URL
+            $query = $this->db->query("SELECT * FROM " . DB_PREFIX . "seo_url WHERE `store_id` = '". self::DEFAULT_STORE ."' AND `query` = 'manufacturer_id=" . (int)$key . "'");
+            foreach ($query->rows as $row) {
+                $language_id = $row['language_id'];
+                $keyword = $row['keyword'];
+                $this->db->query("INSERT IGNORE INTO " . DB_PREFIX . "seo_url SET store_id = '" . (int)$store_id . "', language_id = '" . (int)$language_id . "', query = 'manufacturer_id=" . (int)$manufacturer_id . "', keyword = '" . $this->db->escape($keyword) . "'");
+            }
+        }
+
         // Добавляем статьи
         $this->load->model('catalog/information');
 
         $sql = "SELECT * FROM " . DB_PREFIX . "information i LEFT JOIN " . DB_PREFIX . "information_to_store i2s ON (i.information_id = i2s.information_id) WHERE i2s.store_id = '". self::DEFAULT_STORE ."'";
 
+        $informations = array();
+
         $query = $this->db->query($sql);
 
         foreach ($query->rows as $information) {
-            $this->model_catalog_information->copyInformation($information['information_id'], array($store_id));
+            $information_id = $this->model_catalog_information->copyInformation($information['information_id'], array($store_id));
+            $informations[$information['information_id']] = $information_id;
         }
 
+        foreach ($informations as $key => $information_id) {
+            // SEO URL
+            $query = $this->db->query("SELECT * FROM " . DB_PREFIX . "seo_url WHERE `store_id` = '". self::DEFAULT_STORE ."' AND `query` = 'information_id=" . (int)$key . "'");
+            foreach ($query->rows as $row) {
+                $language_id = $row['language_id'];
+                $keyword = $row['keyword'];
+                $this->db->query("INSERT IGNORE INTO " . DB_PREFIX . "seo_url SET store_id = '" . (int)$store_id . "', language_id = '" . (int)$language_id . "', query = 'information_id=" . (int)$information_id . "', keyword = '" . $this->db->escape($keyword) . "'");
+            }
+        }
 
         // category_path
         foreach ($categories as $key => $value) {
@@ -154,6 +186,14 @@ class ModelInstallInstall extends Model {
                     $this->db->query("DELETE FROM " . DB_PREFIX . "product_related WHERE product_id = '" . (int)$related_id . "' AND related_id = '" . (int)$product_id . "'");
                     $this->db->query("INSERT INTO " . DB_PREFIX . "product_related SET product_id = '" . (int)$related_id . "', related_id = '" . (int)$product_id . "'");
                 }
+            }
+
+            // SEO URL
+            $query = $this->db->query("SELECT * FROM " . DB_PREFIX . "seo_url WHERE `store_id` = '". self::DEFAULT_STORE ."' AND `query` = 'product_id=" . (int)$key . "'");
+            foreach ($query->rows as $row) {
+                $language_id = $row['language_id'];
+                $keyword = $row['keyword'];
+                $this->db->query("INSERT IGNORE INTO " . DB_PREFIX . "seo_url SET store_id = '" . (int)$store_id . "', language_id = '" . (int)$language_id . "', query = 'product_id=" . (int)$product_id . "', keyword = '" . $this->db->escape($keyword) . "'");
             }
         }
 
