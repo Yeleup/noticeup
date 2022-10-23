@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+  <name>Rapid Theme Modification</name>
+	<code>Rapid Theme</code>
+  <version>1.0</version>
+  <author>nexer</author>
+  <link>https://nexer.by/</link>
+	<file path="catalog/controller/common/header.php">
+		 <operation>
+			<search><![CDATA[$this->load->language('common/header');]]></search>
+			<add position="after"><![CDATA[
+				// Rapid
+				if ($this->config->get('config_theme') == 'rapid') {
+					$this->load->language('rapid/rapid');
+
+					$this->load->model('setting/setting');
+
+					$rapid = array();
+					$rapid = $this->model_setting_setting->getSetting('theme_rapid', $this->config->get('config_store_id'));
+
+					if (!$rapid) {
+						$rapid = $this->model_setting_setting->getSetting('theme_rapid');
+					}
+
+					$language_id = $this->config->get('config_language_id');
+
+					if (isset($rapid['theme_rapid_main_menu_toggle']) && $rapid['theme_rapid_main_menu_toggle']){
+						$data['links_status'] = $rapid['theme_rapid_main_menu_toggle'];
+					} else {
+						$data['links_status'] = false;
+					}
+
+					if (isset($rapid['theme_rapid_main_menu_item']) && $rapid['theme_rapid_main_menu_item']){
+						$rapid_links = $rapid['theme_rapid_main_menu_item'];
+					} else {
+						$rapid_links = array();
+					}
+
+					if (!empty($rapid_links)){
+						foreach ($rapid_links as $key => $value) {
+							$sorted_links[$key] = $value['sort'];
+						}
+						array_multisort($sorted_links, SORT_ASC, $rapid_links);
+					}
+
+					$data['rapid_links'] = array();
+
+					foreach ($rapid_links as $link) {
+						$data['rapid_links'][] = array(
+							'title'        => html_entity_decode($link['title'][$language_id], ENT_QUOTES, 'UTF-8'),
+							'href'         => $link['link'][$language_id],
+							'sort'         => $link['sort'],
+						);
+					}
+				}
+				]]></add>
+		</operation> 
+		<operation>
+			<search><![CDATA[$data['text_wishlist'] = sprintf($this->language->get('text_wishlist'), $this->model_account_wishlist->getTotalWishlist());]]></search>
+			<add position="after"><![CDATA[
+				// Rapid
+				if ($this->config->get('config_theme') == 'rapid') {
+					$data['text_head_wishlist_value'] = sprintf($this->language->get('text_head_wishlist_value'), $this->model_account_wishlist->getTotalWishlist());
+					$data['text_head_wishlist'] = $this->language->get('text_head_wishlist');
+				}
+				]]></add>
+		</operation>
+		<operation>
+			<search><![CDATA[
+				$data['text_wishlist'] = sprintf($this->language->get('text_wishlist'), (isset($this->session->data['wishlist']) ? count($this->session->data['wishlist']) : 0));
+			]]></search>
+			<add position="after"><![CDATA[
+				// Rapid
+				if ($this->config->get('config_theme') == 'rapid') {
+					$data['text_head_wishlist_value'] = sprintf($this->language->get('text_head_wishlist_value'), (isset($this->session->data['wishlist']) ? count($this->session->data['wishlist']) : 0));
+					$data['text_head_wishlist'] = $this->language->get('text_head_wishlist');
+				}
+			]]></add>
+		</operation>
+	</file>
+
+	<file path="catalog/controller/common/menu.php">
+	 	<operation>
+		  <search><![CDATA[$data['categories'][] = array(]]></search>
+		  <add position="after"><![CDATA[
+		  	// Rapid
+			'category_id' => $category['category_id'],
+		 ]]></add>
+		</operation> 
+	 	<operation>
+		  <search><![CDATA['name'  => $child['name'] . ($this->config->get('config_product_count') ? ' (' . $this->model_catalog_product->getTotalProducts($filter_data) . ')' : ''),]]></search>
+		  <add position="replace"><![CDATA[
+		  	// Rapid
+		  	'name'  => $child['name'] . ($this->config->get('config_product_count') ? ' <span class="count">' . $this->model_catalog_product->getTotalProducts($filter_data) . '</span>' : ''),
+		  ]]></add>
+		</operation> 
+	 	<operation>
+		  <search><![CDATA[foreach ($children as $child) {]]></search>
+		  <add position="after"><![CDATA[
+		  	// Rapid
+		  	if ($this->config->get('config_theme') == 'rapid') {
+				$children2_data = array();
+				$children2 = $this->model_catalog_category->getCategories($child['category_id']);
+				foreach ($children2 as $child2) {
+					$filter2_data = array(
+						'filter_category_id'  => $child2['category_id'],
+						'filter_sub_category' => true
+					);
+					$children2_data[] = array(
+						'name'  => $child2['name'] . ($this->config->get('config_product_count') ? ' <span class="count">' . $this->model_catalog_product->getTotalProducts($filter2_data) . '</span>' : ''),
+						'href'  => $this->url->link('product/category', 'path=' . $category['category_id'] . '_' . $child['category_id'].'_'. $child2['category_id'])
+					);
+				}
+			}
+		]]></add>
+		</operation>
+		<operation>
+		  <search><![CDATA[$children_data[] = array(]]></search>
+		  <add position="after"><![CDATA[
+		  	// Rapid
+		  	'category_id' => $child['category_id'],
+			'children2'   => (isset($children2_data) ? $children2_data : null),
+		  ]]></add>
+		</operation> 
+	</file>
+	<file path="catalog/controller/account/wishlist.php">
+		<operation>
+			<search><![CDATA[$this->load->language('account/wishlist');]]></search>
+			<add position="after"><![CDATA[
+				// Rapid
+				if ($this->config->get('config_theme') == 'rapid') {
+					$this->load->language('rapid/rapid');
+				}
+				]]></add>
+		</operation>
+		<operation>
+			<search><![CDATA[$json['total'] = sprintf($this->language->get('text_wishlist'), $this->model_account_wishlist->getTotalWishlist());]]></search>
+			<add position="after"><![CDATA[
+				// Rapid
+				if ($this->config->get('config_theme') == 'rapid') {
+					$json['total_custom'] = sprintf($this->language->get('text_head_wishlist_value'), $this->model_account_wishlist->getTotalWishlist());
+				}
+				]]></add>
+		</operation>
+		<operation>
+			<search><![CDATA[$json['total'] = sprintf($this->language->get('text_wishlist'), (isset($this->session->data['wishlist']) ? count($this->session->data['wishlist']) : 0));]]></search>
+			<add position="after"><![CDATA[
+				// Rapid
+				if ($this->config->get('config_theme') == 'rapid') {
+					$json['total_custom'] = sprintf($this->language->get('text_head_wishlist_value'), (isset($this->session->data['wishlist']) ? count($this->session->data['wishlist']) : 0));
+				}
+				]]></add>
+		</operation>
+	</file>
+
+   <file path="catalog/controller/extension/module/{special,latest,featured,bestseller}.php">
+    <operation>
+      <search><![CDATA[$data['products'] = array();]]></search>
+      <add position="before"><![CDATA[
+      	// Rapid
+      	if ($this->config->get('config_theme') == 'rapid') {
+			$this->document->addStyle('catalog/view/theme/rapid/assets/owl-carousel/owl.carousel.css');
+			$this->document->addScript('catalog/view/theme/rapid/assets/owl-carousel/owl.carousel.min.js');
+
+			static $module = 0;
+        }
+      ]]></add>
+    </operation>
+    <operation>
+      <search><![CDATA[$data['products'][] = array(]]></search>
+      <add position="before"><![CDATA[
+      	// Rapid
+        if ($this->config->get('config_theme') == 'rapid') {
+        	$data['module'] = $module++;
+		}
+      ]]></add>
+    </operation>
+  </file>
+
+   <file path="catalog/controller/product/product.php">
+    <operation>
+      <search><![CDATA[$this->load->language('product/product');]]></search>
+      <add position="before"><![CDATA[
+      	// Rapid
+      	if ($this->config->get('config_theme') == 'rapid') {
+      		$this->document->addStyle('catalog/view/theme/rapid/assets/owl-carousel/owl.carousel.css');
+      		$this->document->addScript('catalog/view/theme/rapid/assets/owl-carousel/owl.carousel.min.js');
+      	}
+      ]]></add>
+    </operation>
+  </file>  
+  	<file path="catalog/controller/common/footer.php">
+	 	<operation>
+		  <search><![CDATA[$this->load->language('common/footer');]]></search>
+		  <add position="after"><![CDATA[
+		  	// Rapid
+	      	if ($this->config->get('config_theme') == 'rapid') {
+		  		$this->load->language('rapid/rapid');
+				$this->load->model('setting/setting');
+				$this->load->model('design/banner');
+				$this->load->model('tool/image');
+
+				$data['language_id'] = $this->config->get('config_language_id');
+
+				$data['rapid'] = array();
+				$data['rapid'] = $this->model_setting_setting->getSetting('theme_rapid');
+
+				$rapid = array();
+				$rapid = $this->model_setting_setting->getSetting('theme_rapid', $this->config->get('config_store_id'));
+
+				$theme_rapid_pay_icons_banner_id = -99;
+				$data['theme_rapid_pay_icons_toggle'] = false;
+
+				if(!empty($rapid)){
+					$theme_rapid_pay_icons_banner_id = $rapid['theme_rapid_pay_icons_banner_id'];
+					$data['theme_rapid_pay_icons_toggle'] = $rapid['theme_rapid_pay_icons_toggle'];
+				}
+
+				$data['pay_icons'] = array();
+				$pay_icons = $this->model_design_banner->getBanner($theme_rapid_pay_icons_banner_id);
+
+				foreach ($pay_icons as $pay_icon) {
+					if (is_file(DIR_IMAGE . $pay_icon['image'])) {
+						$data['pay_icons'][] = array(
+							'title' => $pay_icon['title'],
+							'link'  => $pay_icon['link'],
+							'image' => $this->model_tool_image->resize($pay_icon['image'], 48, 32)
+						);
+					}
+				}
+		  	}
+		  ]]></add>
+		</operation> 
+	</file>
+</modification>

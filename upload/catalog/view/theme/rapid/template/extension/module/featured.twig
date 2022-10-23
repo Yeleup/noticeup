@@ -1,0 +1,78 @@
+<div class="row">
+  <div class="col-xs-12">
+    <div class="head-module">
+        {{ heading_title }}
+    </div> 
+    <div id="featured{{ module }}" class="owl-carousel owl-module" style="opacity: 1;">
+       {% for product in products %}
+      <div class="product-layout ">
+          <div class="image"><a href="{{ product.href }}"><img src="{{ product.thumb }}" alt="{{ product.name }}" title="{{ product.name }}" class="img-responsive" /></a></div>
+          <div class="caption">
+            <h4><a href="{{ product.href }}">{{ product.name }}</a></h4>
+            <p>{{ product.description }}</p>
+            {% if product.rating %}
+              <div class="rating">
+                {% for i in 5 %}
+                {% if product.rating < i %}
+                <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-2x"></i></span>
+                {% else %}
+                <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span>
+                {% endif %}
+                {% endfor %}
+              </div>
+            {% endif %}
+             {% if product.price %}
+              {% if  product.special %}
+                  <span class="price-old">{{ product.price }}</span>
+               {% endif %}
+              {% if product.tax %}
+              <span class="price-tax">{{ text_tax }} {{ product.tax }}</span>
+              {% endif %}
+            {% endif %}
+          </div>
+          <div class="button-group btn-group-justified product-price">
+              <div class="btn-group">
+                {% if product.price %}
+                <div class="btn-block">
+                  {% if not product.special %}
+                    {{ product.price }}
+                  {% else %}
+                    {{ product.special }}
+                  {% endif %}
+                </div>
+                 {% endif %}
+              </div>
+              <div class="btn-group">
+                  <button class="btn-block" type="button" onclick="cart.add('{{ product.product_id }}');"><i class="fa fa-shopping-cart"></i> <span class="hidden-xs hidden-sm hidden-md">{{ button_cart }}</span></button>
+              </div>
+          </div>
+          <div class="button-group btn-group-justified product-wish-comp">
+              <div class="btn-group">
+                  <button class="btn-block" type="button" data-toggle="tooltip" title="{{ button_wishlist }}" onclick="wishlist.add('{{ product.product_id }}');"><i class="fa fa-heart"></i></button>
+              </div>
+              <div class="btn-group">
+                  <button class="btn-block" type="button" data-toggle="tooltip" title="{{ button_compare }}" onclick="compare.add('{{ product.product_id }}');"><i class="fa fa-exchange"></i></button>
+              </div>
+            </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+<script >
+    $('#featured{{ module }}').owlCarousel({
+    responsiveBaseWidth: '#featured{{ module }}',
+    itemsCustom: [[0, 1], [448, 2], [668, 3], [848, 4]],
+    theme: 'product-carousel',
+    navigation: true,
+    slideSpeed: 200,
+    paginationSpeed: 9999999999,
+    stopOnHover: true,
+    touchDrag: true,
+    mouseDrag: false,
+    navigationText: ['<i class="fa fa-chevron-left"></i>', '<i class="fa fa-chevron-right"></i>'],
+    pagination: false,
+    autoPlay: true
+  });
+</script>
+

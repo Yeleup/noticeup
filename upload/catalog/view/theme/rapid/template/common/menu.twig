@@ -1,0 +1,77 @@
+{% if categories %}
+<nav id="menu" class="btn-group btn-block">
+  <button type="button" class="btn btn-menu btn-block dropdown-toggle"  data-toggle="dropdown" >
+    <i class="fa fa-bars"></i>
+    {{ text_category }}
+  </button>
+  <ul id="menu-list" class="dropdown-menu">
+    {% for category in categories %}
+    {% if category.children %}
+    <li >
+      <span class="toggle-child">
+        <i class="fa fa-plus plus"></i>
+        <i class="fa fa-minus minus"></i>
+      </span>
+      <a class="with-child">
+        <i class="fa fa-angle-right arrow"></i>
+          {{ category.name }}
+        <span class="mobilink hidden-lg hidden-md" onclick="location.href=\{{ category.href }}\" ></span>
+      </a>
+      {% if category.column < 2 %}
+        {% set col_class = 'col-md-12' %}
+        {% set box_class = 'box-col-1' %}
+        {% set cols_count = 1 %}
+      {% elseif category.column == 2 %}
+        {% set col_class = 'col-md-6' %}
+        {% set box_class = 'box-col-2' %}
+        {% set cols_count = 2 %}
+      {% else %}
+        {% set col_class = 'col-md-4' %}
+        {% set box_class = 'box-col-3' %}
+        {% set cols_count = 3 %}
+      {% endif %}
+      <div class="child-box {{ box_class }}">
+        <div class="row">
+        {% set i = 0 %}
+        {% for child in category.children %}
+        <div class="{{ col_class }}">
+          <div class="child-box-cell">
+            <div class="h5">
+            {% if child.children2 %}
+            <span class="toggle-child2">
+              <i class="fa fa-plus plus"></i>
+              <i class="fa fa-minus minus"></i>
+            </span>
+            {% endif %}
+            <a href="{{ child.href }}" class="{% if child.children2 %} with-child2 {% endif %}">
+              <span class="livel-down hidden-md hidden-lg">&#8627;</span>{{ child.name }}</a></div>
+            {% if child.children2 %}
+            <ul class="child2-box">
+              {% for child2 in child.children2 %}
+              <li><a href="{{ child2.href }}"><span class="livel-down">&#8627;</span>{{ child2.name }}</a></li>
+              {% endfor %}
+            </ul>
+            {% endif %}
+          </div>
+        </div>
+          {% set i = i + 1 %}
+          {% if i == cols_count and i != 1 %}
+          <div class="clearfix visible-md visible-lg"></div>
+          {% set i = 0 %}
+          {% endif %}
+        {% endfor %}
+        </div>
+        <div class="see-all-categories hidden-xs hidden-sm">
+          <a href="{{ category.href }}">{{ text_all }}&nbsp;{{ category.name }}</a>
+        </div>
+      </div>
+    </li>
+    {% else %}
+      <li><a href="{{ category.href }}">{{ category.name }}</a></li>
+    {% endif %} 
+    {% endfor %}
+  </ul>
+  <div id="menuMask"></div>
+  <script>$('#menu-list').hover(function () {$('body').addClass('blured')},function () {$('body').removeClass('blured')});</script>
+</nav>
+{% endif %} 

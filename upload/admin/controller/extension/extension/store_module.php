@@ -78,6 +78,10 @@ class ControllerExtensionExtensionStoreModule extends Controller {
                     if (!in_array($extension, array('banner', 'carousel', 'bestseller', 'featured', 'latest', 'slideshow', 'special'))) {
                         continue;
                     }
+                } elseif ($config['config_theme'] == 'rapid') {
+                    if (!in_array($extension, array('banner', 'carousel', 'bestseller', 'featured', 'latest', 'slideshow', 'special'))) {
+                        continue;
+                    }
                 } else {
                     continue;
                 }

@@ -1,0 +1,83 @@
+<footer>
+  <div class="container">
+    <div class="row">
+      {% if informations %}
+      <div class="col-sm-3">
+        <h4><i class="glyphicon glyphicon-info-sign"></i><span>{{ text_information }}</span></h4>
+        <ul >
+          {% for information in informations %}
+          <li><a href="{{ information.href }}">{{ information.title }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endif %}
+      <div class="col-sm-3">
+        <h4><i class="glyphicon glyphicon-comment"></i><span>{{ text_service }}</span></h4>
+        <ul >
+          <li><a href="{{ contact }}">{{ text_contact }}</a></li>
+          <li><a href="{{ return }}">{{ text_return }}</a></li>
+          <li><a href="{{ sitemap }}">{{ text_sitemap }}</a></li>
+        </ul>
+      </div>
+      <div class="col-sm-3">
+        <h4><i class="fa fa-share"></i><span>{{ text_extra }}</span></h4>
+        <ul >
+          <li><a href="{{ manufacturer }}">{{ text_manufacturer }}</a></li>
+          <li><a href="{{ voucher }}">{{ text_voucher }}</a></li>
+          <li><a href="{{ affiliate }}">{{ text_affiliate }}</a></li>
+          <li><a href="{{ special }}">{{ text_special }}</a></li>
+        </ul>
+      </div>
+      <div class="col-sm-3">
+        <h4><i class="glyphicon glyphicon-user"></i><span>{{ text_account }}</span></h4>
+        <ul >
+			<li><a href="{{ account }}">{{ text_account }}</a></li>
+          <li><a href="{{ order }}">{{ text_order }}</a></li>
+          <li><a href="{{ wishlist }}">{{ text_wishlist }}</a></li>
+          <li><a href="{{ newsletter }}">{{ text_newsletter }}</a></li>
+        </ul>
+      </div>
+    </div>
+    <hr>
+   <div class="row">
+		<div class="col-sm-12 col-md-4">
+			{{ powered }}
+		</div>
+		{% if theme_rapid_pay_icons_toggle %}
+		<div class="col-sm-12 col-md-8 text-right">
+			<ul class="list-unstyled footer-icons">
+				{% for pay_icon in pay_icons %}
+				<li>
+					{% if pay_icon.link %}
+						<a target="_blank" href="{{ pay_icon.link }}"><img src="{{ pay_icon.image }}" alt="{{ pay_icon.title }}" class="img-responsive" /></a>
+					{% else %}
+						<img src="{{ pay_icon.image }}" alt="{{ pay_icon.title }}" class="img-responsive" />
+					{% endif %}
+				</li>
+				{% endfor %}
+			</ul>
+		</div>
+		{% endif %}
+	</div>
+  </div>
+</footer>
+{% for script in scripts %}
+<script src="{{ script }}" type="text/javascript"></script>
+{% endfor %}
+
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript" >
+   (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+   m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+   (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+   ym(72666451, "init", {
+        clickmap:true,
+        trackLinks:true,
+        accurateTrackBounce:true,
+        webvisor:true
+   });
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/72666451" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+</body></html>
